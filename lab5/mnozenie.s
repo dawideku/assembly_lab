@@ -10,16 +10,15 @@ newline: .ascii "\n"
 newline_len = . - newline
 msg2: .ascii "Sum as binary:\n"
 msg2_len = . - msg2
-of: .ascii "1"
-of_len = 1
+
 
 .data
 liczba_1:
 .long 0xF0643000, 0x99900000, 0xAAA00231, 0xF0F0F0F0
 liczba_2:
 .long 0x01000000, 0x01100000, 0xBBB50000, 0x12312313
-out: .space 16
-out_bin: .space 128
+out: .space 32
+out_bin: .space 256
 out_bin_len = . - out_bin
 
 .text
@@ -27,24 +26,48 @@ out_bin_len = . - out_bin
 .global _start
 _start:
 
-mov $12, %edx
+mov $28, %edx
 mov $4, %ecx
-clc
-pushf
 
 petla:
-popf
-mov liczba_1(%edx), %eax
-adcl liczba_2(%edx), %eax
-pushf
+xor %eax, %eax
 mov %eax, out(%edx)
 sub $4, %edx
 loop petla
 
+mov $3, %ebx
+mov $3, %ecx
 
-koniec:
+petla_i:
+
+petla_j:
+
+mov liczba_1(,%ebx, 4), %eax
+mov liczba_2(,%ecx, 4), %edx
+mul %edx
+mov %ebx, %esi
+add %ecx, %esi
+inc %esi
+add out(,%esi, 4), %eax
+dec %esi
+adc out(,%esi, 4), %edx
+mov %edx, out(,%esi,4)
+inc %esi
+mov %eax, out(,%esi,4)
+
+dec %ecx
+cmp $-1, %ecx
+jg petla_j
+
+mov $3, %ecx
+dec %ebx
+cmp $-1, %ebx
+jg petla_i
+
 
 test:
+
+koniec:
 
 xor %edx, %edx
 
@@ -76,7 +99,7 @@ jle petla2
 iter_1:
 
 add $4, %edx
-cmp $17, %edx
+cmp $33, %edx
 jle petla_main
 
 mov $SYSWRITE, %eax
@@ -85,19 +108,6 @@ mov $msg2, %ecx
 mov $msg2_len, %edx
 int $0x80
 
-xor %eax, %eax
-popf
-adc %eax, %eax
-cmp $1, %eax
-jne no_of
-
-mov $SYSWRITE, %eax
-mov $STDOUT, %ebx
-mov $of, %ecx
-mov $of_len, %edx
-int $0x80
-
-no_of:
 
 mov $SYSWRITE, %eax
 mov $STDOUT, %ebx
