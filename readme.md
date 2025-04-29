@@ -57,7 +57,7 @@ New text: 10101011110000010001010110010010
 
 ## Lab4
 
-### Program dodający dwie liczby 32-bajtowe w systemie szesnastkowym i wyświetlający wynik w postaci binarnej
+### Program dodający dwie liczby 16-bajtowe w systemie szesnastkowym i wyświetlający wynik w postaci binarnej
 ```
 Liczby:
 liczba_1:
@@ -77,7 +77,7 @@ Sum as binary:
 
 ## Lab5
 
-### Program mnożący dwie liczby 32-bajtowe w systemie szesnastkowym i wyświetlający wynik w postaci binarnej
+### Program mnożący dwie liczby 16-bajtowe w systemie szesnastkowym i wyświetlający wynik w postaci binarnej
 ```
 Liczby:
 liczba_1:
